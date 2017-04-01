@@ -8,7 +8,7 @@
 pub mod v1;
 
 pub struct Err<'a> {
-    error: &'a str
+    error: &'a str,
 }
 
 impl<'a> Err<'a> {

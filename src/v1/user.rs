@@ -1,7 +1,6 @@
 /// Represents a Ore user or organization.
 #[derive(Clone, Debug)]
 pub struct User<'a> {
-
     avatar: Avatar<'a>,
 
     // TODO: switch to a chrono time struct?
@@ -12,7 +11,6 @@ pub struct User<'a> {
     id: &'a u32,
 
     // TODO: add project field
-
     /// The roles for the user.
     roles: Vec<&'a str>,
 
@@ -24,7 +22,6 @@ pub struct User<'a> {
 }
 
 impl<'a> User<'a> {
-
     /// Gets the avatar for the user.
     pub fn get_avatar(&self, size: u32) -> Avatar<'a> {
         match self.avatar {
@@ -72,18 +69,18 @@ impl<'a> User<'a> {
                -> Result<User<'a>, super::super::Err<'a>> {
         // TODO: add validation code
         Ok(User {
-            avatar: avatar,
-            created_at: created_at,
-            id: id,
-            roles: roles,
-            starred: starred,
-            username: username,
-        })
+               avatar: avatar,
+               created_at: created_at,
+               id: id,
+               roles: roles,
+               starred: starred,
+               username: username,
+           })
     }
 }
 
 #[derive(Clone, Copy, Debug)]
 pub enum Avatar<'a> {
     Avatar(&'a str),
-    AvatarTemplate(&'a str)
+    AvatarTemplate(&'a str),
 }
