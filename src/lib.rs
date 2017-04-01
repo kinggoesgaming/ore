@@ -4,6 +4,8 @@
 //! [Ore]: https://ore.spongepowered.org
 //! [Sponge]: https://www.spongepowered.org
 
+pub extern crate chrono;
+
 /// The API for version 1 of the Ore API.
 pub mod v1;
 

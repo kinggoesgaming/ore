@@ -1,11 +1,13 @@
+use chrono::prelude::*;
+
 /// Represents a Ore user or organization.
 #[derive(Clone, Debug)]
 pub struct User<'a> {
+    /// The avatar for the user.
     avatar: Avatar<'a>,
 
-    // TODO: switch to a chrono time struct?
     /// The date when the user was created.
-    created_at: &'a str,
+    created_at: &'a DateTime<UTC>,
 
     /// The id of the user.
     id: &'a u32,
@@ -35,7 +37,7 @@ impl<'a> User<'a> {
     }
 
     /// Gets the date and time when the user was created at.
-    pub fn get_creation_date_time(&self) -> &str {
+    pub fn get_creation_date_time(&self) -> &DateTime<UTC> {
         self.created_at
     }
 
@@ -61,7 +63,7 @@ impl<'a> User<'a> {
 
     /// Create a new instance of User.
     pub fn new(avatar: Avatar<'a>,
-               created_at: &'a str,
+               created_at: &'a DateTime<UTC>,
                id: &'a u32,
                roles: Vec<&'a str>,
                starred: Vec<&'a str>,
