@@ -1,10 +1,15 @@
-use chrono::prelude::*;
+use chrono::{DateTime, UTC};
+use std::fmt::{Display, Formatter};
+use std::fmt::Result as FmtResult;
+
+/// The result type for `User` creation.
+pub type UserResult<'a> = Result<User<'a>, super::super::Err<'a>>;
 
 /// Represents a Ore user or organization.
 #[derive(Clone, Debug)]
 pub struct User<'a> {
     /// The avatar for the user.
-    avatar: Avatar<'a>,
+    avatar: &'a Avatar<'a>,
 
     /// The date when the user was created.
     created_at: &'a DateTime<UTC>,
@@ -25,15 +30,8 @@ pub struct User<'a> {
 
 impl<'a> User<'a> {
     /// Gets the avatar for the user.
-    pub fn get_avatar(&self, size: u32) -> Avatar<'a> {
-        match self.avatar {
-            Avatar::Avatar(_) => self.avatar,
-            Avatar::AvatarTemplate(x) => {
-                let tmp: &'a str = x;
-                tmp.replace("{size}", size.to_string().as_str()).as_str();
-                Avatar::AvatarTemplate(tmp)
-            }
-        }
+    pub fn get_avatar(&self) -> &'a Avatar<'a> {
+        self.avatar
     }
 
     /// Gets the date and time when the user was created at.
@@ -61,14 +59,15 @@ impl<'a> User<'a> {
         self.username
     }
 
+    // TODO: replace with from_json function
     /// Create a new instance of User.
-    pub fn new(avatar: Avatar<'a>,
+    pub fn new(avatar: &'a Avatar<'a>,
                created_at: &'a DateTime<UTC>,
                id: &'a u32,
                roles: Vec<&'a str>,
                starred: Vec<&'a str>,
                username: &'a str)
-               -> Result<User<'a>, super::super::Err<'a>> {
+               -> UserResult<'a> {
         // TODO: add validation code
         Ok(User {
                avatar: avatar,
@@ -79,10 +78,39 @@ impl<'a> User<'a> {
                username: username,
            })
     }
+
+    pub fn from_json(json: &'a str) -> UserResult<'a> {
+        // TODO: implement
+        unimplemented!()
+    }
+}
+
+impl<'a> Display for User<'a> {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f,
+               "User (avatar: {}, created at: {}, id: {}, projects: {}, roles: {:?}, starred: {:?},\
+                username: {})",
+               self.get_avatar(),
+               self.get_creation_date_time(),
+               self.get_id(),
+               "", // TODO: apply the projects
+               self.get_roles(),
+               self.get_starred(),
+               self.get_username())
+    }
 }
 
 #[derive(Clone, Copy, Debug)]
 pub enum Avatar<'a> {
     Avatar(&'a str),
     AvatarTemplate(&'a str),
+}
+
+impl<'a> Display for Avatar<'a> {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        match *self {
+            Avatar::Avatar(x) => write!(f, "Avatar: {}", x),
+            Avatar::AvatarTemplate(x) => write!(f, "Avatar Template: {}", x),
+        }
+    }
 }
